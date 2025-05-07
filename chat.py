@@ -1,26 +1,23 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM
-import torch
+from transformers import AutoModelForCausalLM
+from transformers import AutoTokenizer
+import argparse
+import os
 
+from utils import load_datasets,chat
 
-device = "cuda:0"
-prompt="how can i become smarter?"
-model_pth="/root/autodl-fs/meta-llama/Llama-2-7b-chat-hf"
-tokenizer = AutoTokenizer.from_pretrained(model_pth)
-model = AutoModelForCausalLM.from_pretrained(
-    model_pth,
-    device_map=device
-)
+os.environ["HF_ENDPOINT"] = "https://hf-mirror.com" 
 
-def chat(prompt):
-    input_ids=tokenizer.encode(prompt,return_tensors="pt").to(device=device)
-    output=model.generate(        
-        input_ids,
-        max_length=200,
-        pad_token_id=tokenizer.eos_token_id,
-    )
-    response = tokenizer.decode(output[0], skip_special_tokens=True)
-    return response
-
-chat_response = chat(prompt)
-print(chat_response)
+if __name__=="__main__":
     
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('--model_name_or_pth', default='../../workdir/models/vicuna-13b-v1.5', help='Path to the model file or name of model')
+    parser.add_argument('--data_path', default="./data/UltraSafety/UltraSafety.jsonl", help='Path to the data')
+    parser.add_argument('--device', default="auto", help='device')
+    args = parser.parse_args()
+    
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_pth)
+    model = AutoModelForCausalLM.from_pretrained(args.model_name_or_pth,device_map=args.device)
+    prompt=load_datasets(args.data_path)
+    response = chat(prompt,model,tokenizer)
+    
+    print(response)
