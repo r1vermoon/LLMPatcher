@@ -4,6 +4,8 @@ from peft import LoraConfig, TaskType,PeftConfig, PeftModel
 from utils import chat
 from config import parse_args
 
+from test_harm import Test_harm
+
 args=parse_args()
 
 lora_config = LoraConfig(
@@ -39,3 +41,11 @@ print(f"test_prompt:{test_prompt}")
 response = chat(test_prompt,model,tokenizer)
 print(response)
 print("seccess！")
+
+sequence=[response]
+path='hubert233/GPTFuzz'
+device='cuda:0'
+test=Test_harm(path,sequence,device)
+predict=test.judge()
+print(predict)
+
