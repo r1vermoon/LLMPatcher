@@ -40,7 +40,7 @@ user_prompt = jailbreak_prompt.format(Question=malicious_question)
 # test_prompt = system_prompt.format(Question=question, Answer="")
 test_prompt = chat_prompt.format(Question=user_prompt, Answer="")
 
-print("seccess！")
+print("success！")
 
 
 path='hubert233/GPTFuzz'

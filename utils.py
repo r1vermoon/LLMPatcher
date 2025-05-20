@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 from datasets import Dataset
 
 def chat(prompt,model,tokenizer):
@@ -77,3 +78,34 @@ def load_dataset_exam(tokenizer):
     
     dataset = Dataset.from_list(samples)
     return dataset
+
+def load_datasets(datasets_path):
+    if datasets_path=='data/prompt_datasets/jailbreak_prompts_2023_05_07.csv':
+        df = pd.read_csv(datasets_path)
+        list_prompts=df['prompt'].to_list()
+
+    elif datasets_path=='data/prompt_datasets/JBB-Behaviors/data/judge-comparison.csv':
+        df = pd.read_csv(datasets_path)
+        list_prompts=df['prompt'].to_list()
+
+    elif datasets_path=='data/prompt_datasets/MultiJail.csv':
+        df = pd.read_csv(datasets_path)
+        list_prompts=df['en'].to_list()
+
+    elif datasets_path=='data/prompt_datasets/toxic-chat_annotation_all.csv':
+        df = pd.read_csv(datasets_path)
+        list_prompts=df['user_input'].to_list()
+
+    elif datasets_path=='data/prompt_datasets/FilteredStrongReject_dataset.csv':
+        df = pd.read_csv(datasets_path)
+        list_prompts=df['forbidden_prompt'].to_list()
+        
+    elif datasets_path=='data/prompt_datasets/FilteredStrongReject_dataset.csv':
+        df = pd.read_csv(datasets_path)
+        list_prompts=df['forbidden_prompt'].to_list()
+
+    elif datasets_path=='data/prompt_datasets/harmful_behaviors.csv':
+        df = pd.read_csv(datasets_path)
+        list_prompts=df['goal'].to_list()
+        
+    return list_prompts
