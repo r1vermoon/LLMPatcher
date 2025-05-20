@@ -9,7 +9,8 @@ def chat(prompt,model,tokenizer):
         max_new_tokens =500,
         pad_token_id=tokenizer.eos_token_id,
     )
-    response = tokenizer.decode(output[0], skip_special_tokens=True)
+    #response = tokenizer.decode(output[0], skip_special_tokens=True)
+    response = tokenizer.decode(output[0][input_ids.shape[-1]:], skip_special_tokens=True)
     return response
 
 

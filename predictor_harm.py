@@ -2,16 +2,15 @@ import torch
 from transformers import RobertaForSequenceClassification, RobertaTokenizer
 
 
-class Test_harm:
-    def __init__(self,path,sequence,device):
+class Predictor:
+    def __init__(self,path,device):
         self.path=path
-        self.sequence=sequence
         self.device=device
         self.tokenizer = RobertaTokenizer.from_pretrained(self.path)
         self.model = RobertaForSequenceClassification.from_pretrained(self.path, num_labels=2).to(self.device)
         
-    def judge(self):
-        inputs=self.tokenizer(self.sequence,
+    def judge(self,sequence):
+        inputs=self.tokenizer(sequence,
             padding=True,
             truncation=True,
             max_length=512,

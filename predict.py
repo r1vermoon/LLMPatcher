@@ -1,10 +1,13 @@
+import pandas as pd
+import json
+
 from transformers import AutoTokenizer
 from transformers import AutoModelForCausalLM
-from peft import LoraConfig, TaskType,PeftConfig, PeftModel
-from utils import chat
-from config import parse_args
+from peft import LoraConfig, TaskType,PeftModel
 
-from test_harm import Test_harm
+from config import parse_args
+from predictor_harm import Predictor
+from find_harm_prompts import find_harm_prompts
 
 args=parse_args()
 
@@ -19,7 +22,7 @@ lora_config = LoraConfig(
 
 model=AutoModelForCausalLM.from_pretrained(args.model_name_or_pth,device_map=args.device)
 tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_pth)
-model = PeftModel.from_pretrained(model, "./output/checkpoint-125")
+# model = PeftModel.from_pretrained(model, "./outputs/checkpoint-125")
 
 chat_prompt = '''
 ### Human:
@@ -37,15 +40,18 @@ user_prompt = jailbreak_prompt.format(Question=malicious_question)
 # test_prompt = system_prompt.format(Question=question, Answer="")
 test_prompt = chat_prompt.format(Question=user_prompt, Answer="")
 
-print(f"test_prompt:{test_prompt}")
-response = chat(test_prompt,model,tokenizer)
-print(response)
 print("seccess！")
 
-sequence=[response]
+
 path='hubert233/GPTFuzz'
 device='cuda:0'
-test=Test_harm(path,sequence,device)
-predict=test.judge()
-print(predict)
+predictor=Predictor(path,device)
 
+df = pd.read_excel('data/prompt_datasets/Prompts_Index.xlsx', engine='openpyxl')
+
+list_prompts=df['Prompt'].to_list()
+
+outputs=find_harm_prompts(list_prompts[:100], predictor,model,chat_prompt,tokenizer,malicious_question)
+
+with open('outputs/outputs.json', 'w') as f:
+    json.dump(outputs, f)

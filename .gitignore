@@ -1,4 +1,4 @@
 *.ipynb
 /data
 /__pycache__
-/output
+/outputs
