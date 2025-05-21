@@ -5,6 +5,7 @@ from transformers import AutoTokenizer
 from transformers import AutoModelForCausalLM
 from peft import LoraConfig, TaskType,PeftModel
 
+from utils import load_datasets
 from config import parse_args
 from predictor_harm import Predictor
 from find_harm_prompts import find_harm_prompts
@@ -47,9 +48,7 @@ path='hubert233/GPTFuzz'
 device='cuda:0'
 predictor=Predictor(path,device)
 
-df = pd.read_excel('data/prompt_datasets/Prompts_Index.xlsx', engine='openpyxl')
-
-list_prompts=df['Prompt'].to_list()
+list_prompts=load_datasets(args.datasets_name)
 
 outputs=find_harm_prompts(list_prompts[:100], predictor,model,chat_prompt,tokenizer,malicious_question)
 

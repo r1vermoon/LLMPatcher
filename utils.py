@@ -79,33 +79,34 @@ def load_dataset_exam(tokenizer):
     dataset = Dataset.from_list(samples)
     return dataset
 
-def load_datasets(datasets_path):
-    if datasets_path=='data/prompt_datasets/jailbreak_prompts_2023_05_07.csv':
-        df = pd.read_csv(datasets_path)
+def load_datasets(datasets_name):
+    if datasets_name=='Prompts_Index':
+        df = pd.read_excel('data/prompt_datasets/Prompts_Index.xlsx', engine='openpyxl')
+        list_prompts=df['Prompt'].to_list()
+    
+    elif datasets_name=='jailbreak_prompts':
+        df = pd.read_csv('data/prompt_datasets/jailbreak_prompts_2023_05_07.csv')
         list_prompts=df['prompt'].to_list()
 
-    elif datasets_path=='data/prompt_datasets/JBB-Behaviors/data/judge-comparison.csv':
-        df = pd.read_csv(datasets_path)
+    elif datasets_name=='judge-comparison':
+        df = pd.read_csv('data/prompt_datasets/JBB-Behaviors/data/judge-comparison.csv')
         list_prompts=df['prompt'].to_list()
 
-    elif datasets_path=='data/prompt_datasets/MultiJail.csv':
-        df = pd.read_csv(datasets_path)
+    elif datasets_name=='MultiJail':
+        df = pd.read_csv('data/prompt_datasets/MultiJail.csv')
         list_prompts=df['en'].to_list()
 
-    elif datasets_path=='data/prompt_datasets/toxic-chat_annotation_all.csv':
-        df = pd.read_csv(datasets_path)
+    elif datasets_name=='toxic-chat':
+        df = pd.read_csv('data/prompt_datasets/toxic-chat_annotation_all.csv')
         list_prompts=df['user_input'].to_list()
 
-    elif datasets_path=='data/prompt_datasets/FilteredStrongReject_dataset.csv':
-        df = pd.read_csv(datasets_path)
+    elif datasets_name=='FilteredStrongReject_dataset':
+        df = pd.read_csv('data/prompt_datasets/FilteredStrongReject_dataset.csv')
         list_prompts=df['forbidden_prompt'].to_list()
-        
-    elif datasets_path=='data/prompt_datasets/FilteredStrongReject_dataset.csv':
-        df = pd.read_csv(datasets_path)
-        list_prompts=df['forbidden_prompt'].to_list()
+    
 
-    elif datasets_path=='data/prompt_datasets/harmful_behaviors.csv':
-        df = pd.read_csv(datasets_path)
+    elif datasets_name=='harmful_behaviors':
+        df = pd.read_csv('data/prompt_datasets/harmful_behaviors.csv')
         list_prompts=df['goal'].to_list()
         
     return list_prompts
