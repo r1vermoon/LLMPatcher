@@ -11,7 +11,7 @@ def chat(prompt,model,tokenizer):
         pad_token_id=tokenizer.eos_token_id,
     )
     #response = tokenizer.decode(output[0], skip_special_tokens=True)
-    response = tokenizer.decode(output[0][input_ids.shape[-1]:], skip_special_tokens=True)
+    response = tokenizer.decode(output[0][input_ids.shape[-1]:], skip_special_tokens=True)  #remove input from response
     return response
 
 
@@ -110,3 +110,13 @@ def load_datasets(datasets_name):
         list_prompts=df['goal'].to_list()
         
     return list_prompts
+
+
+
+
+def synthesis_message(question, prompt):
+    QUESTION_PLACEHOLDER = '[INSERT PROMPT HERE]'
+    if QUESTION_PLACEHOLDER not in prompt:
+        return None
+
+    return prompt.replace(QUESTION_PLACEHOLDER, question)

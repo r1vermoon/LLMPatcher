@@ -52,9 +52,9 @@ def train_step():
 
     gating_weights = gating_network(X_input)  
 
-    expert_outputs = [expert(X_input) for expert in experts]  # 每个专家的输出形状是 (batch_size, output_dim)
+    expert_outputs = [expert(X_input) for expert in experts] 
 
-    weighted_expert_outputs = sum(gating_weights[:, i:i+1] * expert_outputs[i] for i in range(num_experts))
+    weighted_expert_outputs = sum(gating_weights[:, i:i+1] * expert_outputs[i] for i in range(num_experts))  
 
 
     loss = criterion(weighted_expert_outputs, y_true)
